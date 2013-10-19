@@ -33,7 +33,7 @@ def signUp(email, password):
 
 	return "email : %s, password : %s" % (newUser.email, newUser.password)
 
-@app.route('/signin/<email>/<password>')
+@app.route('/signin/<userEmail>/<userPassword>')
 def printUser(userEmail, userPassword):
 	user = User.query.filter_by(email = userEmail).first()
 	if (user):
