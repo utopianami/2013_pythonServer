@@ -1,5 +1,6 @@
-from flask import Flask
+from flask import Flask, url_for
 from flask import render_template
+from flask import request
 from flask.ext.sqlalchemy import SQLAlchemy
 
 app=Flask(__name__)
@@ -24,25 +25,30 @@ class User(db.Model):
 def home():
 	return 'hello world'
 
-@app.route('/signup/<email>/<password>')
+@app.route('/signup/<email>/<password>', methods=['GET','POST'])
 def signUp(email, password):
-	newUser = User(email, password)
-
-	db.session.add(newUser)
-	db.session.commit()
-
-	return "email : %s, password : %s" % (newUser.email, newUser.password)
-
-@app.route('/signin/<userEmail>/<userPassword>')
-def printUser(userEmail, userPassword):
-	user = User.query.filter_by(email = userEmail).first()
-	if (user):
-		if (user.password == userPassword):
-			return True
-		else:
-			return "password is different"
+	if (request.method =='POST'):
+		newUser = User(email, password)
+		db.session.add(newUser)
+		db.session.commit()
+		return "email : %s, password : %s" % (newUser.email, newUser.password)
 	else:
-		return "ID is difference"
+		return home()
+	
+
+@app.route('/checkLogin/<userEmail>/<userPassword>', methods=['GET', 'POST'])
+def printUser(userEmail, userPassword):
+	if (request.method =='POST'):
+		user = User.query.filter_by(email = userEmail).first()
+		if (user):
+			if (user.password == userPassword):
+				return True
+			else:
+				return "password is different"
+		else:
+			return "ID is difference"
+	else:
+		return home()
 
 if __name__=='__main__':
 	app.run(debug = True, host='0.0.0.0', port = 7000)
