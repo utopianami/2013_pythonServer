@@ -1,0 +1,78 @@
+#menuBar {
+    float: left;
+    border: 10px solid darkblue;
+    width : 20%;
+    height : 40%;
+    background-color: #313131;
+    box-shadow: 0 0 7px 0 rgba(50,50,50,.45);
+    z-index: 2;
+    width: 136px;
+    position: fixed;
+    left: 15px;
+    top: 15px;
+}
+
+
+
+body{
+    font-size: 24px;
+    font-family: sans-serif ;
+    margin-left: 200px;
+}
+
+.recommendList{
+    float: left;
+}
+.hotList{
+    float: left;
+}
+.newList{
+    float: left;
+}
+
+#recommendBar {
+    background: darkslategray;
+    float: left;
+    width : 90%;
+    height : 10%;
+    border: 10px solid darkred;
+    color :green;
+}
+
+#hot {
+    margin-top: 10px;
+    background: darkcyan;
+    float: left;
+    width : 90%;
+    height : 10%;
+    border: 10px solid darkred;
+    color :green;
+}
+
+#newSongs {
+    background: darkkhaki;
+    margin-top: 10px;
+    float: left;
+    width : 90%;
+    height : 10%;
+    border: 10px solid darkred;
+    color :green;
+}
+
+.footer {
+    clear: both;
+    margin-top: 1000px;
+    padding: 50px;
+    border: 10px solid darkgray;
+    color :green;
+}
+
+*.header_fingqooq{
+    color : yellow;
+}
+
+span {
+    font-size: 14px;
+    color : white;
+}
+
