@@ -4,7 +4,7 @@ from app import db
 from app.users.models import User
 from flask.views import View
 
-mod = Blueprint('users', __name__, url_prefix='users')
+mod = Blueprint('users', __name__, url_prefix='/users')
 
 class SignUp(View):
 	methods = ['GET', 'POST']
