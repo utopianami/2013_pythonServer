@@ -23,7 +23,6 @@ class SignUp(View):
 		email = request.form['userEmail']
 		password = request.form['userPassword']
 		"""
-
 		user = User(email=email, password=password)
 		print user
 		db.session.add(user)
@@ -33,22 +32,27 @@ class SignUp(View):
 
 class SignIn(View):
 	methods = ['GET', 'POST']
-
+	#http://10.73.44.20:2074/users/signin/?userEmail=asdf&userPassword=pasaps
 	def dispatch_request(self):
-		print 'signIn'
 
-		print ruquest.args
-		print request.form
-
-		email = request.form['userEmail']
-		password = request.form['userPassword']
-		
-		if User.query.filter_by(email=email).password == password:
+		email = request.args.get('userEmail')
+		password = request.args.get('userPassword')
+	
+		if User.query.filter_by(email=email).first().password == password:
 			return 'True'
 
 		return 'False'
 
+
+class Test(View):
+	method = ['GET', 'POST']
+
+	def dispatch_request(self):
+		print 'TEST'
+		return 'Hi man'	
+
 mod.add_url_rule('/signup/', view_func=SignUp.as_view('signup_user'))
 mod.add_url_rule('/signin/', view_func=SignIn.as_view('signin_user'))
+mod.add_url_rule('/test/', view_func=Test.as_view('test'))
 
 
