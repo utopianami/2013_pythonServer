@@ -8,4 +8,3 @@ db = SQLAlchemy(app)
 
 from app.users.views import mod as usersModule
 app.register_blueprint(usersModule)
-

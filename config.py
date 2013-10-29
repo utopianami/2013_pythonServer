@@ -2,6 +2,7 @@ import os
 _basedir = os.path.abspath(os.path.dirname(__file__))
 
 DEBUG = True
+TESTING = True
 
 ADMINS = frozenset(['namul10@gmail.com'])
 SECRET_KEY = 'VERYVERYSECRET'

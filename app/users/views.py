@@ -7,52 +7,48 @@ from flask.views import View
 mod = Blueprint('users', __name__, url_prefix='/users')
 
 class SignUp(View):
-	methods = ['GET', 'POST']
-
+	methods = ['POST']
 
 	def dispatch_request(self):
-		print 'signUp'
+		try:
+			email = request.form['userEmail']
+			password = request.form['userPassword']
+			
+			if(User.query.filter_by(email=email).first() ):
+				raise Exception('AleadyUseEmailException')
 
-		request_data = request.args
+			user = User(email=email, password=password)
+			db.session.add(user)
+			db.session.commit()
 
-		# GET
-		email = request_data['userEmail']
-		password = request.args['userPassword']
-		
-		""" POST
-		email = request.form['userEmail']
-		password = request.form['userPassword']
-		"""
-		user = User(email=email, password=password)
-		print user
-		db.session.add(user)
-		db.session.commit()
+		except Exception, e:
+			print e
+			return 'False'
 		
 		return 'True'
 
 class SignIn(View):
-	methods = ['GET', 'POST']
-	#http://10.73.44.20:2074/users/signin/?userEmail=asdf&userPassword=pasaps
-	def dispatch_request(self):
+	methods = ['POST']
 
-		email = request.args.get('userEmail')
-		password = request.args.get('userPassword')
+	def dispatch_request(self):
+		try:
+			email = request.form['userEmail']
+			password = request.form['userPassword']
+
+			user = User.query.filter_by(email=email).first()
+			if user == None:
+				raise Exception('NotExistUser')
+			if user.password == password:
+				return 'True'
 	
-		if User.query.filter_by(email=email).first().password == password:
-			return 'True'
-
+		except Exception, e:
+			print e
+			return 'False'
+		
 		return 'False'
-
-
-class Test(View):
-	method = ['GET', 'POST']
-
-	def dispatch_request(self):
-		print 'TEST'
-		return 'Hi man'	
 
 mod.add_url_rule('/signup/', view_func=SignUp.as_view('signup_user'))
 mod.add_url_rule('/signin/', view_func=SignIn.as_view('signin_user'))
-mod.add_url_rule('/test/', view_func=Test.as_view('test'))
+
 
 
