@@ -3,7 +3,7 @@ import unittest
 from flask.ext.testing import TestCase
 
 from app import app, db
-from app.users.models import User
+from app.users.models import User, UserRelation
 from pprint import pprint
 
 class ManyTest(TestCase):
@@ -22,6 +22,9 @@ class ManyTest(TestCase):
         db.session.remove()
         db.drop_all()
 
+    def test_relation(self):
+        pass
+        
     def test_sign(self):
 
         a = User('email22', 'password')

@@ -5,7 +5,9 @@ from pprint import pprint
 
 from flask import *
 from app import *
-from app.users.models import User
+from app.users.models import User, UserRelation
+from app.missions.models import Mission, MissionState
+from app.energy.models import EnergyData
 
 os.environ['PYTHONINSPECT'] = 'True'
 
