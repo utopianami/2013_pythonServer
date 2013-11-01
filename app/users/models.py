@@ -9,6 +9,7 @@ class User(db.Model):
 	email = db.Column(db.String(120), unique=True)
 	password = db.Column(db.String(120))
 	
+	user_info = db.relationship('UserInfo', backref='user', lazy='dynamic')
 	user_relation = db.relationship('UserRelation', backref='user', lazy='dynamic') 
 	mission_state = db.relationship('MissionState', backref='user', lazy='dynamic')
 	energy_data = db.relationship('EnergyData', backref='user', lazy='dynamic') 
@@ -20,6 +21,18 @@ class User(db.Model):
 
 	def __repr__(self):
 		return '<User %r>' % (self.email)
+
+class UserInfo(db.Model):
+	__tablename__ = "users_userinfo"
+	
+	id = db.Column(db.Integer, primary_key = True)
+	user_id = db.Column(db.Integer, dbForeignKey('users_user.id'))
+
+	user_grade = db.Column(db.Integer)
+	house_type = db.Column(db.Integer)
+	house_acreage = db.Column(db.Integer)
+	income  = db.Column(db.Integer)
+	cooler_heater_flag = db.Column(db.Integer)
 
 class UserRelation(db.Model):
 	__tablename__ = "users_relation"

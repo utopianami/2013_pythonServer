@@ -17,3 +17,5 @@ class EnergyData(db.Model):
 	def __repr__(self):
 		return '<EnergyData User %r, %d, %r >' % \
 			(self.user, self.energy_amount, self.submit_time)
+
+
