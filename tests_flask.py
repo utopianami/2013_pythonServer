@@ -23,7 +23,22 @@ class ManyTest(TestCase):
         db.drop_all()
 
     def test_relation(self):
-        pass
+        A = User('A', 'A')
+        B = User('B', 'B')
+        C = User('C', 'C')
+
+        db.session.add(A)
+        db.session.add(B)
+        db.session.add(C)
+        db.session.commit()
+
+        UserRelation.make_relation_two_user(A.id, B.id)
+        UserRelation.make_relation_two_user(B.id, C.id)
+
+        assert len(UserRelation.query.filter_by(user_id=A.id).all()) == 1
+        assert len(UserRelation.query.filter_by(user_id=B.id).all()) == 2
+        assert len(UserRelation.query.filter_by(user_id=C.id).all()) == 1
+
         
     def test_sign(self):
 
