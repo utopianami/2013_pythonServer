@@ -1,4 +1,5 @@
 *.DS_Store
+*.db
 
 *.py[cod]
 *.swp
