@@ -3,7 +3,7 @@ import unittest
 from flask.ext.testing import TestCase
 
 from app import app, db
-from app.users.models import User, UserRelation
+from app.users.models import User, UserInfo
 from pprint import pprint
 
 class ManyTest(TestCase):
@@ -21,30 +21,11 @@ class ManyTest(TestCase):
     def tearDown(self):
         db.session.remove()
         db.drop_all()
-
-    def test_relation(self):
-        A = User('A', 'A')
-        B = User('B', 'B')
-        C = User('C', 'C')
-
-        db.session.add(A)
-        db.session.add(B)
-        db.session.add(C)
-        db.session.commit()
-
-        UserRelation.make_relation_two_user(A.id, B.id)
-        UserRelation.make_relation_two_user(B.id, C.id)
-
-        assert len(UserRelation.query.filter_by(user_id=A.id).all()) == 1
-        assert len(UserRelation.query.filter_by(user_id=B.id).all()) == 2
-        assert len(UserRelation.query.filter_by(user_id=C.id).all()) == 1
-
         
     def test_sign(self):
+        u = User('email22', 'password')
 
-        a = User('email22', 'password')
-
-        db.session.add(a)
+        db.session.add(u)
         db.session.commit()
         assert len(User.query.all()) == 1
 
@@ -61,6 +42,40 @@ class ManyTest(TestCase):
 
         rv = self.sign_in('Ha', 'Man')
         assert rv.data == 'False'
+
+    def test_info_setup(self):
+        u = User('SetUp', 'User')
+        db.session.add(u)
+        db.session.commit()
+
+        u_id = User.query.filter_by(email='SetUp').first().id
+        ui = UserInfo._make_user_info_with_email('SetUp', 1, 1, 1, 1)
+        db.session.add(ui)
+        db.session.commit()    
+        assert ui.__repr__() == UserInfo.query.filter_by(user_id=u_id).first().__repr__() == \
+            "<UserInfo> User : %d, Type %d%d%d%d"%(u_id, 1, 1, 1, 1)
+
+        u = User('SetUp2', 'User')
+        db.session.add(u)
+        db.session.commit()
+
+        rv = self.info_setup('SetUp2', 1, 1, 1, 1)
+        
+        print rv.data
+        assert rv.data == 'True'
+        assert UserInfo.query.filter_by(user_id=u_id).first().__repr__() == \
+            "<UserInfo> User : %d, Type %d%d%d%d"%(u_id, 1, 1, 1, 1)
+
+
+    def info_setup(self, email, house_type, house_area, income_type, cooler_heater_type):
+        return self.client.post('/users/setup/', data = dict(
+            userEmail = email,
+            houseType = house_type,
+            houseArea = house_area,
+            incomeType = income_type,
+            coolerHeaterType = cooler_heater_type
+            ), follow_redirects=True)
+
 
     def sign_up(self, user_email, user_password):
         return self.client.post('/users/signup/', data = dict(
