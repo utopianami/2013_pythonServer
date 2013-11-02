@@ -3,6 +3,7 @@ from flask import Blueprint, request
 from app import db
 from app.users.models import User, UserInfo
 from flask.views import View
+from sqlalchemy.exc import IntegrityError
 
 mod = Blueprint('users', __name__, url_prefix='/users')
 
@@ -65,9 +66,15 @@ class InfoSetUp(View):
 			db.session.commit()
 			return 'True'
 
+		except IntegrityError, e:
+			print 'Aleady Exist User Info for %r'%email
+			return 'True'
+			
 		except Exception, e:
 			print e
-			return e
+			return 'False'
+
+
 
 		return 'False'
 

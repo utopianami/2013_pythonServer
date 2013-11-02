@@ -1,4 +1,5 @@
 from app import db
+
 from app.missions.models import MissionState
 from app.energy.models import EnergyData
 
@@ -21,14 +22,18 @@ class User(db.Model):
 	def __repr__(self):
 		return '<User %r>' % (self.email)
 
+	@classmethod
+	def find_by_email(cls, email):
+		return User.query.filter_by(email=email).first()
+
 class UserInfo(db.Model):
 	__tablename__ = "users_userinfo"
 	
 	id = db.Column(db.Integer, primary_key = True)
 	
-	user_id = db.Column(db.Integer, db.ForeignKey('users_user.id'))
-	house_type = db.Column(db.Integer)
+	user_id = db.Column(db.Integer, db.ForeignKey('users_user.id'), unique=True)
 	house_area = db.Column(db.Integer)
+	house_type = db.Column(db.Integer)
 	income_type  = db.Column(db.Integer)
 	cooler_heater_type = db.Column(db.Integer)
 
@@ -43,9 +48,9 @@ class UserInfo(db.Model):
 	@classmethod
 	def _make_user_info_with_email(cls, email, house_type, house_area, \
 										income_type, cooler_heater_type):
-		user_id = User.query.filter_by(email=email).first().id
+		user_id = User.find_by_email(email).id
 		return UserInfo(user_id, house_type, house_area, income_type, cooler_heater_type)
 
 	def __repr__(self):
 		return '<UserInfo> User : %d, Type %d%d%d%d'%\
-			(self.user_id, self.house_type, self.house_area, self.income_type, self.cooler_heater_type)
+			(self.user_id, self.house_area, self.house_type, self.income_type, self.cooler_heater_type)
