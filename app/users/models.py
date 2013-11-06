@@ -44,13 +44,33 @@ class UserInfo(db.Model):
 		self.house_area = house_area
 		self.income_type = income_type
 		self.cooler_heater_type = cooler_heater_type
-
-	@classmethod
-	def _make_user_info_with_email(cls, email, house_type, house_area, \
-										income_type, cooler_heater_type):
-		user_id = User.find_by_email(email).id
-		return UserInfo(user_id, house_type, house_area, income_type, cooler_heater_type)
-
+	
 	def __repr__(self):
 		return '<UserInfo> User : %d, Type %d%d%d%d'%\
 			(self.user_id, self.house_area, self.house_type, self.income_type, self.cooler_heater_type)
+
+	def get_avg_energy_data_with_date(self, start_date, end_date):
+		try:
+			user_infos = self.query.filter_by(house_type=self.house_type, house_area=self.house_area\
+				, income_type=self.income_type, cooler_heater_type=self.cooler_heater_type).all()
+
+			watt_sum = 0
+			count = 0
+			for user_info in user_infos:
+				user_id = user_info.user.id
+				for ed in EnergyData.get_energy_datas_with_date(user_id, start_date, end_date):
+					count+=1
+					watt_sum += ed.energy_amount
+			count = (count/24)*len(user_infos)
+
+		except Exception, e:
+			print 'fuck'
+		
+		return "%.2f"%(float(watt_sum)/count)
+
+	@classmethod
+	def _make_user_info_with_email(cls, email, house_area, house_type, \
+										income_type, cooler_heater_type):
+		user_id = User.find_by_email(email).id
+		return UserInfo(user_id, house_area, house_type, income_type, cooler_heater_type)
+

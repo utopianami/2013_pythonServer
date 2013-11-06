@@ -60,14 +60,14 @@ class ManyTest(TestCase):
         db.session.add(u)
         db.session.commit()
 
-        rv = self.info_setup('SetUp2', 1, 1, 1, 1)
+        rv = self.info_setup('SetUp2', 5, 3, 3, 2)
         
-        assert rv.data == 'True'
+        assert rv.data != 'False'
         assert UserInfo.query.filter_by(user_id=u_id).first().__repr__() == \
             "<UserInfo> User : %d, Type %d%d%d%d"%(u_id, 1, 1, 1, 1)
 
-        rv = self.info_setup('SetUp2', 1, 1, 1, 1)
-        assert rv.data == 'True'
+        rv = self.info_setup('SetUp2', 5, 3, 6, 3)
+        assert rv.data != 'False'
         
     def test_insert_energy(self):
 

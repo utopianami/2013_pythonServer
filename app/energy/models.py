@@ -23,9 +23,24 @@ class EnergyData(db.Model):
 	def __repr__(self):
 		return '<EnergyData User %r, %d, %r >' % \
 			(self.user, self.energy_amount, self.submit_time)
+	
+	@classmethod
+	def get_energy_data_with_date(user_id, start_date, end_date):
+		return EnergyData.query.filter(EnergyData.user_id==user_id, \
+			EnergyData.submit_time>start_date, \
+			EnergyData.submit_time<end_date \
+			)	
 
 	@classmethod
 	def _make_energy_data_with_email(cls, email, submit_time, energy_amount):
 		from app.users.models import User
 		user_id = User.find_by_email(email).id
 		return EnergyData(user_id, submit_time, energy_amount)
+	
+	@classmethod
+	def get_energy_datas_with_date(cls, user_id, start_date, end_date):
+		return EnergyData.query.filter(EnergyData.user_id==user_id, \
+			EnergyData.submit_time>start_date, \
+			EnergyData.submit_time<end_date \
+			).all()
+

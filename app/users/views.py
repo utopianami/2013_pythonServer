@@ -5,6 +5,8 @@ from app.users.models import User, UserInfo
 from flask.views import View
 from sqlalchemy.exc import IntegrityError
 
+from datetime import datetime
+
 mod = Blueprint('users', __name__, url_prefix='/users')
 
 class SignUp(View):
@@ -64,7 +66,12 @@ class InfoSetUp(View):
 
 			db.session.add(ui)
 			db.session.commit()
-			return 'True'
+
+			user_info = UserInfo.query.filter_by(house_type=house_type, house_area=house_area\
+				, income_type=income_type, cooler_heater_type=cooler_heater_type).first()
+			avg_data = user_info.get_avg_energy_data_with_date(datetime(2013, 10, 1, 1), datetime(2013, 10, 31, 23, 59, 59))
+
+			return str(avg_data)
 
 		except IntegrityError, e:
 			print 'Aleady Exist User Info for %r'%email
@@ -74,9 +81,9 @@ class InfoSetUp(View):
 			print e
 			return 'False'
 
-
-
 		return 'False'
+
+
 
 mod.add_url_rule('/signup/', view_func=SignUp.as_view('signup_user'))
 mod.add_url_rule('/signin/', view_func=SignIn.as_view('signin_user'))

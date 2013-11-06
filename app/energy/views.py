@@ -29,9 +29,6 @@ class InsertEnergyData(View):
 			return 'False'
 
 		return 'False'
-
-
-
 	
 mod.add_url_rule('/insert/', view_func=InsertEnergyData.as_view('insert_energy_data'))
 
