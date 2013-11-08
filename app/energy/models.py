@@ -39,8 +39,7 @@ class EnergyData(db.Model):
 	
 	@classmethod
 	def get_energy_datas_with_date(cls, user_id, start_date, end_date):
-		return EnergyData.query.filter(EnergyData.user_id==user_id, \
-			EnergyData.submit_time>start_date, \
-			EnergyData.submit_time<end_date \
-			).all()
+		return EnergyData.query.filter(EnergyData.user_id==user_id). \
+			filter(EnergyData.submit_time>start_date). \
+			filter(EnergyData.submit_time<end_date).all()
 
