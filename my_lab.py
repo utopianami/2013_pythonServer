@@ -56,7 +56,7 @@ def make_users():
 					db.session.add(u)
 					db.session.commit()
 
-					ui = UserInfo._make_user_info_with_email(user_email, house_type, house_area, income, cooler_heater_type)
+					ui = UserInfo._make_user_info_with_email(user_email, house_area, house_type, income, cooler_heater_type)
 					db.session.add(ui)
 					db.session.commit()
 
