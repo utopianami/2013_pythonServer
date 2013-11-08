@@ -37,7 +37,7 @@ class UserInfo(db.Model):
 	income_type  = db.Column(db.Integer)
 	cooler_heater_type = db.Column(db.Integer)
 
-	def __init__(self, user_id, house_type, house_area, \
+	def __init__(self, user_id, house_area, house_type, \
 					income_type, cooler_heater_type):
 		self.user_id = user_id
 		self.house_type = house_type
@@ -46,12 +46,12 @@ class UserInfo(db.Model):
 		self.cooler_heater_type = cooler_heater_type
 	
 	def __repr__(self):
-		return '<UserInfo> User : %d, Type %d%d%d%d'%\
-			(self.user_id, self.house_area, self.house_type, self.income_type, self.cooler_heater_type)
+		return '<UserInfo> User : %r[%d], Type %d%d%d%d'%\
+			(self.user.email, self.user_id, self.house_area, self.house_type, self.income_type, self.cooler_heater_type)
 
 	def get_avg_energy_data_with_date(self, start_date, end_date):
 		try:
-			user_infos = self.query.filter_by(house_type=self.house_type, house_area=self.house_area\
+			user_infos = UserInfo.query.filter_by( house_area=self.house_area, house_type=self.house_type\
 				, income_type=self.income_type, cooler_heater_type=self.cooler_heater_type).all()
 
 			watt_sum = 0
@@ -62,11 +62,13 @@ class UserInfo(db.Model):
 					count+=1
 					watt_sum += ed.energy_amount
 			count = (count/24)*len(user_infos)
-
+			result = "%.2f"%(float(watt_sum)/count)
 		except Exception, e:
-			print 'fuck'
+			print e
+			print user_infos
+			return 0
 		
-		return "%.2f"%(float(watt_sum)/count)
+		return result
 
 	@classmethod
 	def _make_user_info_with_email(cls, email, house_area, house_type, \

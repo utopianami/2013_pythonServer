@@ -6,6 +6,14 @@ from app import app, db
 from app.users.models import User, UserInfo
 from app.energy.models import EnergyData
 from pprint import pprint
+from datetime import datetime, timedelta
+import random
+
+HOUSE_AREA = [113, 169, 221, 254, 287, 323,352, 360]
+HOUSE_TYPE = [0.80, 0.97, 1.04,  1.17]
+INCOME_TYPE = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+COOLER_HEATER_TYPE = [0, 1, 2, 3]
+energy_data_list = []
 
 class ManyTest(TestCase):
 
@@ -45,30 +53,39 @@ class ManyTest(TestCase):
         assert rv.data == 'False'
 
     def test_info_setup(self):
-        u = User('SetUp', 'User')
-        db.session.add(u)
-        db.session.commit()
-        
-        u_id = User.query.filter_by(email='SetUp').first().id
-        ui = UserInfo._make_user_info_with_email('SetUp', 1, 1, 1, 1)
-        db.session.add(ui)
-        db.session.commit()    
-        assert ui.__repr__() == UserInfo.query.filter_by(user_id=u_id).first().__repr__() == \
-            "<UserInfo> User : %d, Type %d%d%d%d"%(u_id, 1, 1, 1, 1)
+        self.make_users()
+        print 'Make Users : %d'%(len(User.query.all() ) )
+        self.ptrol_all_users()
 
-        u = User('SetUp2', 'User')
-        db.session.add(u)
+        print UserInfo.query.count() == 12
+        print User.query.count() == 12
+        pprint(User.query.all())
+
+        test_user = User('test_user5393', '5393')
+        db.session.add(test_user)
         db.session.commit()
 
-        rv = self.info_setup('SetUp2', 5, 3, 3, 2)
+        test_user_info = UserInfo._make_user_info_with_email('test_user5393', 5, 3, 9, 3)
+        db.session.add(test_user_info)
+        db.session.commit()
         
-        assert rv.data != 'False'
-        assert UserInfo.query.filter_by(user_id=u_id).first().__repr__() == \
-            "<UserInfo> User : %d, Type %d%d%d%d"%(u_id, 1, 1, 1, 1)
+        assert UserInfo.query.count() == 13
+        assert User.query.count() == 13
 
-        rv = self.info_setup('SetUp2', 5, 3, 6, 3)
-        assert rv.data != 'False'
+        test_user = User.find_by_email('test_user5393')
+        test_user_info = test_user.user_info.first()
         
+        print test_user_info.get_avg_energy_data_with_date(datetime(2013, 10, 1, 1), datetime(2013, 10, 31, 23, 59, 59))
+
+        self.sign_up('test_user7193', '7193')   
+        self.sign_in('test_user7193', '7193')   
+        self.info_setup('test_user7193', 7, 1, 9 , 3)
+
+        test_user = User.find_by_email('test_user7193')
+        test_user_info = test_user.user_info.first()
+        
+        print test_user_info.get_avg_energy_data_with_date(datetime(2013, 10, 1, 1), datetime(2013, 10, 31, 23, 59, 59))
+
     def test_insert_energy(self):
 
         u = User('Energy', 'password')
@@ -88,13 +105,72 @@ class ManyTest(TestCase):
             energyAmount = energy_amount
             ), follow_redirects=True)
 
+    def make_electricity_data(self):
+        
+        for type_val in HOUSE_AREA:
+            temp_list = []
+            for area_val in HOUSE_TYPE:
+                val = "%d"%(type_val/30 * area_val * 1000 /24) 
+                temp_list.append(int(val)) 
+            energy_data_list.append(temp_list)
+        
+        print 'EnergyData List Success make'
+        pprint(energy_data_list)
 
 
-    def info_setup(self, email, house_type, house_area, income_type, cooler_heater_type):
+                
+    def make_users(self):
+        for house_area in xrange(5, len(HOUSE_AREA)):
+            for house_type in xrange(0,4):
+                for income in xrange(9,10):
+                    for cooler_heater_type in xrange(3, 4): 
+                        user_email = "User%d%d%d%d"%(house_area, house_type, income, cooler_heater_type)
+                        password = 'password'
+                        
+                        u = User(user_email, password)
+                        db.session.add(u)
+                        db.session.commit()
+
+                        ui = UserInfo._make_user_info_with_email(user_email, house_area, house_type, income, cooler_heater_type)
+                        db.session.add(ui)
+                        db.session.commit()
+
+    def make_energy_data(self,user_email, energy_amount):
+        DEFAULT_YEAR, DEFAULT_MOONTH, DEFAULT_DAY, DEFAULT_TIME = 2013, 10, 1, 0
+        minus_flag = -1
+
+        dt = datetime(DEFAULT_YEAR, DEFAULT_MOONTH, DEFAULT_DAY, DEFAULT_TIME)
+        for day_plus in xrange(1, 31):
+            for time_plus in xrange(0,24):
+                
+                growth_amount = random.random()*10*minus_flag
+                energy_amount += growth_amount
+                minus_flag *= -1
+
+                ed = EnergyData._make_energy_data_with_email(user_email, dt, energy_amount)
+                db.session.add(ed)
+                dt += timedelta(hours=1)
+
+        db.session.commit()
+                
+
+    def ptrol_all_users(self):  
+        self.make_electricity_data()
+
+        for house_area in xrange(5, len(HOUSE_AREA)):
+            for house_type in xrange(0,len(HOUSE_TYPE)):
+                for income in xrange(9,len(INCOME_TYPE)):
+                    for cooler_heater_type in xrange(3, len(COOLER_HEATER_TYPE)): 
+                        energy_amount = (energy_data_list[house_area][house_type])  
+                        user_email = "User%d%d%d%d"%(house_area, house_type, income, cooler_heater_type)
+                        
+                        self.make_energy_data(user_email, energy_amount)
+
+    def info_setup(self, email, house_area, house_type, income_type, cooler_heater_type):
         return self.client.post('/users/setup/', data = dict(
             userEmail = email, 
-            houseType = house_type,
             houseArea = house_area,
+            houseType = house_type,
             incomeType = income_type,
             coolerHeaterType = cooler_heater_type
             ), follow_redirects=True)

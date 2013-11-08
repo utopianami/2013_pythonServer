@@ -61,13 +61,13 @@ class InfoSetUp(View):
 			income_type  = int(request.form['incomeType'])
 			cooler_heater_type = int(request.form['coolerHeaterType'])
 
-			ui = UserInfo._make_user_info_with_email(email, house_type, house_area, \
+			ui = UserInfo._make_user_info_with_email(email, house_area, house_type, \
 				income_type, cooler_heater_type)
 
 			db.session.add(ui)
 			db.session.commit()
 
-			user_info = UserInfo.query.filter_by(house_type=house_type, house_area=house_area\
+			user_info = UserInfo.query.filter_by(house_area=house_area, house_type=house_type\
 				, income_type=income_type, cooler_heater_type=cooler_heater_type).first()
 			avg_data = user_info.get_avg_energy_data_with_date(datetime(2013, 10, 1, 1), datetime(2013, 10, 31, 23, 59, 59))
 
@@ -75,10 +75,10 @@ class InfoSetUp(View):
 
 		except IntegrityError, e:
 			print 'Aleady Exist User Info for %r'%email
-			return 'True'
+			return str(avg_data)
 			
 		except Exception, e:
-			print e
+			print 'Set Up Error  : %r '%e
 			return 'False'
 
 		return 'False'

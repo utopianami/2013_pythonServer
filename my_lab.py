@@ -30,18 +30,6 @@ def getEnergyDataWithDate(user_id, start_date, end_date):
 		EnergyData.submit_time<end_date \
 		)
 
-#logic()
-
-a = User.query.filter_by(email="User5393").first()
-
-ui = a.user_info.first().get_avg_energy_data_with_date(datetime(2013, 10, 1, 1), datetime(2013, 10, 31, 23, 59, 59))
-print ui
-
-u = UserInfo.query.filter_by(house_type=3, house_area=5\
-				, income_type=9, cooler_heater_type=3).first()
-print u
-
-
 def make_electricity_data():
 	
 	for type_val in HOUSE_AREA:
@@ -104,6 +92,6 @@ def ptrol_all_users():
 					make_energy_data(user_email, energy_amount)
 					
 					
-#make_users()
-#print 'Make Users : %d'%(len(User.query.all() ) )
-#ptrol_all_users()
+make_users()
+print 'Make Users : %d'%(len(User.query.all() ) )
+ptrol_all_users()
