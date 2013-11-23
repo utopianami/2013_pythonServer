@@ -36,6 +36,7 @@ class UserInfo(db.Model):
 	house_type = db.Column(db.Integer)
 	income_type  = db.Column(db.Integer)
 	cooler_heater_type = db.Column(db.Integer)
+	goal = db.Column(db.Integer)
 
 	def __init__(self, user_id, house_area, house_type, \
 					income_type, cooler_heater_type):

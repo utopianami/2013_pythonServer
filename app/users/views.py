@@ -83,12 +83,25 @@ class InfoSetUp(View):
 
 		return 'False'
 
+class GoalSetUp(View):
+	method = ['POST']
 
+	def dispatch_request(self):
+		try:
+			email = request.form['userEmail']
+			goal = request.form['goalData']
+			user = User.query.filter_by(email=email)
+
+			user.user_info.goal = int(goal)
+
+			return 'True'
+
+		except Exception, e:
+			
+			return 'False'
 
 mod.add_url_rule('/signup/', view_func=SignUp.as_view('signup_user'))
 mod.add_url_rule('/signin/', view_func=SignIn.as_view('signin_user'))
 mod.add_url_rule('/setup/', view_func=InfoSetUp.as_view('setup_user'))
-
-
-
+mod.add_url_rule('/goal/', view_func=GoalSetUp.as_view('goal_user'))
 

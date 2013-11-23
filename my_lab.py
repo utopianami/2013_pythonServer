@@ -13,13 +13,6 @@ INCOME_TYPE = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 COOLER_HEATER_TYPE = [0, 1, 2, 3]
 energy_data_list = []
 
-
-
-def logic():
-	user_infos = getUserLikeType()
-
-	#for user_info in user_infos:
-
 	
 def getUserLikeType():
 	return UserInfo.query.filter_by(house_type=1, house_area=1, income_type=1, cooler_heater_type=1)

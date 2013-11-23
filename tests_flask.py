@@ -31,6 +31,21 @@ class ManyTest(TestCase):
         db.session.remove()
         db.drop_all()
         
+    def goal_test(self):
+        u = User('goal', 'goal')
+        db.session.add(u)
+        db.session.commit()
+        assert User.query.count() == 1
+
+        ui = UserInfo._make_user_info_with_email('goal', 5, 3, 9, 3)
+        db.session.add(ui)
+        db.session.commit()
+
+        rv = self.goal('goal', '5')        
+        assert rv.data == 'True'
+
+        assert User.query.filter_by(email='goal').user_info.goal == 5
+
     def test_sign(self):
         u = User('email22', 'password')
 
@@ -184,8 +199,14 @@ class ManyTest(TestCase):
     def sign_in(self, user_email, user_password):
         return self.client.post('/users/signin/', data = dict(
             userEmail=user_email,
-            userPassword=user_password)
-        , follow_redirects=True)
+            userPassword=user_password
+            ), follow_redirects=True)
+
+    def goal(self, user_email, goal_data):
+        return self.client.post('/users/goal/', data = dict(
+            userEmail = user_email,
+            goalData = goal_data
+            ), follow_redirects=True)
 
 if __name__ == '__main__':
     unittest.main()
