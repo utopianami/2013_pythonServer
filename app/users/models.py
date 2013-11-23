@@ -13,7 +13,7 @@ class User(db.Model):
 	user_info = db.relationship('UserInfo', backref='user', lazy='dynamic')
 	mission_state = db.relationship('MissionState', backref='user', lazy='dynamic')
 	energy_data = db.relationship('EnergyData', backref='user', lazy='dynamic') 
-
+	
 
 	def __init__(self, email=None, password=None):
 		self.password = password;
@@ -67,7 +67,6 @@ class UserInfo(db.Model):
 			count = (count/24)*len(user_infos)
 			result = "%.2f"%(float(watt_sum)/count)
 		except Exception, e:
-			print e
 			print user_infos
 			return 0
 		

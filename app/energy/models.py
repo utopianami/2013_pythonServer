@@ -22,7 +22,7 @@ class EnergyData(db.Model):
 
 	def __repr__(self):
 		return '<EnergyData User %r, %d, %r >' % \
-			(self.user, self.energy_amount, self.submit_time)
+			(self.,user self.energy_amount, self.submit_time)
 	
 	@classmethod
 	def get_energy_data_with_date(user_id, start_date, end_date):
