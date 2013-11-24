@@ -93,7 +93,7 @@ class GoalSetUp(View):
 			
 			user = User.query.filter_by(email=email).first()
 
-			user.user_info.first().goal = int(goal)
+			user.user_info.first().goal = float(goal)
 
 			return 'True'
 
