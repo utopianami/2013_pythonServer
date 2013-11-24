@@ -30,8 +30,13 @@ class ManyTest(TestCase):
     def tearDown(self):
         db.session.remove()
         db.drop_all()
+
+    def test_set_energy_data(self):
+        rv = self.setrecycledata('test', '100')
         
-    def goal_test(self):
+        print rv.data
+        
+    def test_goal(self):
         u = User('goal', 'goal')
         db.session.add(u)
         db.session.commit()
@@ -41,10 +46,11 @@ class ManyTest(TestCase):
         db.session.add(ui)
         db.session.commit()
 
-        rv = self.goal('goal', '5')        
-        assert rv.data == 'True'
+        rv = self.goal('goal', '5')
+        
+        assert rv.data=='True'
 
-        assert User.query.filter_by(email='goal').user_info.goal == 5
+        assert User.query.filter_by(email='goal').first().user_info.first().goal==5
 
     def test_sign(self):
         u = User('email22', 'password')
@@ -208,5 +214,10 @@ class ManyTest(TestCase):
             goalData = goal_data
             ), follow_redirects=True)
 
+    def setrecycledata(self, user_email, energy_amount):
+        return self.client.post('/energy/setrecycledata/', data = dict(
+            userEmail = user_email,
+            energyAmount = energy_amount
+            ), follow_redirects=True)
 if __name__ == '__main__':
     unittest.main()

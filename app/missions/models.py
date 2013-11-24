@@ -6,6 +6,9 @@ class Mission(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	title = db.Column(db.String(30))
 	contents = db.Column(db.Text())
+	difficulty = db.Column(db.Integer)
+	effect = db.Column(db.Integer)
+
 	mission_state = db.relationship('MissionState', backref='mission', lazy='dynamic')
 
 	def __init__(self, title, contents):

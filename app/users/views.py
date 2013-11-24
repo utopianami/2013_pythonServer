@@ -84,15 +84,16 @@ class InfoSetUp(View):
 		return 'False'
 
 class GoalSetUp(View):
-	method = ['POST']
+	methods = ['POST']
 
 	def dispatch_request(self):
 		try:
 			email = request.form['userEmail']
 			goal = request.form['goalData']
-			user = User.query.filter_by(email=email)
+			
+			user = User.query.filter_by(email=email).first()
 
-			user.user_info.goal = int(goal)
+			user.user_info.first().goal = int(goal)
 
 			return 'True'
 

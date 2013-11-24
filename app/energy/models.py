@@ -43,3 +43,14 @@ class EnergyData(db.Model):
 			filter(EnergyData.submit_time>start_date). \
 			filter(EnergyData.submit_time<end_date).all()
 
+class RealTimeEnergyData(db.Model):
+	__tablename__ = "energy_realtimeenergydata"
+
+	id = db.Column(db.Integer, primary_key = True)
+	email = db.Column(db.String(120))
+	energy_amount = db.Column(db.Integer)
+
+	def __init__(self, email, energy_amount):
+		self.email = email
+		self.energy_amount = energy_amount
+		

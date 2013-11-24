@@ -26,6 +26,13 @@ class User(db.Model):
 	def find_by_email(cls, email):
 		return User.query.filter_by(email=email).first()
 
+	@classmethod
+	def get_friend_list(cls, email):
+		user = cls.find_by_email(email)
+		uis = user.user_info
+
+
+
 class UserInfo(db.Model):
 	__tablename__ = "users_userinfo"
 	
