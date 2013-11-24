@@ -7,7 +7,7 @@ from flask import *
 from app import *
 from app.users.models import User, UserInfo
 from app.missions.models import Mission, MissionState
-from app.energy.models import EnergyData
+from app.energy.models import EnergyData, RealTimeEnergyData
 
 os.environ['PYTHONINSPECT'] = 'True'
 
