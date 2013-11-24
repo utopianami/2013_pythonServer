@@ -46,7 +46,7 @@ class SetDataRecycleSmartphone(View):
 				db.session.commit()
 
 			else:
-				print 'RealTime Energy Data put %r'%energy_amount
+				print 'RealTime Energy Data put %r'%email
 				rt = RealTimeEnergyData.query.filter_by(email=email).first()
 				rt.energy_amount = energy_amount
 
