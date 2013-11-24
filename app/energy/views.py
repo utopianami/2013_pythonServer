@@ -53,17 +53,20 @@ class SetDataRecycleSmartphone(View):
 			return 'False'
 
 class GetDataRecycleSmartphone(View):
+	
 	methods = ['POST']
 
 	def dispatch_request(self):
 		try:
+			
 			email = request.form['userEmail']
-
-			if RealTimeEnergyData.query.filter_by(email=email).count() == 0:
-				return 0
+			rt= RealTimeEnergyData.query.filter_by(email=email)
+			
+			if rt.count() == 0:
+				return '0'
 			else:
-				return RealTimeEnergyData.query.filter_by(email=email).first().energy_amount
-
+				return '%d'%rt.first().energy_amount
+			
 		except Exception, e:
 			return 'False'
 

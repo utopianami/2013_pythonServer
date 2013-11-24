@@ -31,10 +31,20 @@ class ManyTest(TestCase):
         db.session.remove()
         db.drop_all()
 
+    def test_get_energy_data(self):
+
+        rv = self.getrecycledata('test')
+        print rv.data
+
+        rv = self.setrecycledata('test', '100')
+
+        rv = self.getrecycledata('test')
+        print rv.data
+
     def test_set_energy_data(self):
         rv = self.setrecycledata('test', '100')
         
-        print rv.data
+        assert rv.data == 'True'
         
     def test_goal(self):
         u = User('goal', 'goal')
@@ -219,5 +229,10 @@ class ManyTest(TestCase):
             userEmail = user_email,
             energyAmount = energy_amount
             ), follow_redirects=True)
+
+    def getrecycledata(self, user_email):
+        return self.client.post('/energy/getrecycledata/', data = dict(
+            userEmail = user_email,
+            ), follow_redirects=True)        
 if __name__ == '__main__':
     unittest.main()
