@@ -40,11 +40,13 @@ class SetDataRecycleSmartphone(View):
 			energy_amount = request.form['energyAmount']
 
 			if RealTimeEnergyData.query.filter_by(email=email).count() == 0:
+				print 'Make RealTime Energy Data %r'%(email)
 				rt = RealTimeEnergyData(email=email, energy_amount=energy_amount)
 				db.session.add(rt)
 				db.session.commit()
 
 			else:
+				print 'RealTime Energy Data put %r'%energy_amount
 				rt = RealTimeEnergyData.query.filter_by(email=email).first()
 				rt.energy_amount = energy_amount
 
