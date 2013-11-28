@@ -14,7 +14,7 @@ class InsertEnergyData(View):
 		try:
 			email = request.form['userEmail']
 			submit_time = request.form['submitTime']
-			energy_amount = request.form['energyAmount']
+			energy_amount = int(request.form['energyAmount'])
 
 			energy = EnergyData._make_energy_data_with_email(email, submit_time, energy_amount)
 			
@@ -37,7 +37,7 @@ class SetDataRecycleSmartphone(View):
 	def dispatch_request(self):
 		try:
 			email = request.form['userEmail']
-			energy_amount = request.form['energyAmount']
+			energy_amount = int(request.form['energyAmount'])
 
 			if RealTimeEnergyData.query.filter_by(email=email).count() == 0:
 				print 'Make RealTime Energy Data %r:%d'%(email, energy_amount)
@@ -47,9 +47,9 @@ class SetDataRecycleSmartphone(View):
 
 			else:
 				print 'RealTime Energy Data put %r:%d'%(email, energy_amount)
-				rt = RealTimeEnergyData.query.filter_by(email=email).first()
-				rt.energy_amount = energy_amount
-
+				RealTimeEnergyData.query.filter_by(email=email).first().set_energy_amount( energy_amount)
+				db.session.commit()
+	
 			return 'True'
 		except Exception, e:
 			return 'False'

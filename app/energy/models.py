@@ -53,4 +53,9 @@ class RealTimeEnergyData(db.Model):
 	def __init__(self, email, energy_amount):
 		self.email = email
 		self.energy_amount = energy_amount
-		
+
+	def set_energy_amount(self,energy_amount):
+		self.energy_amount = energy_amount
+
+
+
