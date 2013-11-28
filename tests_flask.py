@@ -33,31 +33,21 @@ class ManyTest(TestCase):
 
     def test_get_set_energy_data(self):
         rv = self.sign_up('test', 'test')
-
-        rt = RealTimeEnergyData('test', 100)
-        rt.submit_time = datetime.now()-timedelta(hours=1)
-        db.session.add(rt)
-        db.session.commit()
-
-        rt = RealTimeEnergyData('test', 200)
-        rt.submit_time = datetime.now()-timedelta(hours=1)
-        db.session.add(rt)
-        db.session.commit()
-
-
-        rv = self.setrecycledata('test', '100')
-        assert rv.data == 'True'
-        rv = self.setrecycledata('test', '200')
-        assert rv.data == 'True'
-        rv = self.setrecycledata('test', '300')
-        assert rv.data == 'True'
-        rv = self.setrecycledata('test', '400')
-        assert rv.data == 'True'
-
-        rv = self.getrecycledata('test')
-        assert rv.data == '400'
-
         
+        energy_amount=100
+        test_year, test_month, test_day, test_hour, test_minute, test_second = 2013, 11, 29, 0, 59, 50
+        time_gap = timedelta(seconds=3)
+        time = datetime(test_year, test_month, test_day, test_hour, test_minute, test_second)
+        for i in xrange(20):
+            print time
+            energy_amount+=3
+            a = RealTimeEnergyData('test', energy_amount)
+            a.submit_time = time
+            a.push_data()
+            time += time_gap
+        
+        
+
     def test_goal(self):
         u = User('goal', 'goal')
         db.session.add(u)
@@ -246,5 +236,7 @@ class ManyTest(TestCase):
         return self.client.post('/energy/getrecycledata/', data = dict(
             userEmail = user_email,
             ), follow_redirects=True)        
+        
+
 if __name__ == '__main__':
     unittest.main()

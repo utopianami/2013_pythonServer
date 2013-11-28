@@ -1,6 +1,6 @@
 from app import db
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil import parser
 
 class EnergyData(db.Model):
@@ -62,7 +62,7 @@ class RealTimeEnergyData(db.Model):
 	def push_data(self):
 		try:
 			recently_time = RealTimeEnergyData.get_recently_data_time(self.email)
-			if datetime.now().hour != recently_time:
+			if datetime.now().hour != recently_time.hour:
 				hour = datetime.now().hour
 				year = datetime.now().year
 				month = datetime.now().month
@@ -73,8 +73,8 @@ class RealTimeEnergyData(db.Model):
 				print 'energy_amount : %r'%energy_amount
 				e = EnergyData._make_energy_data_with_email(self.email, time, energy_amount)
 
-				db.add(e)
-				db.commit()
+				db.session.add(e)
+				db.session.commit()
 
 			db.session.add(self)
 			db.session.commit()
@@ -88,17 +88,14 @@ class RealTimeEnergyData(db.Model):
 			datas.reverse()
 			return datas[0].submit_time
 		except Exception, e: 
-			return datetime.now().hour
+			return datetime.now()
 
 	@classmethod
 	def get_energy_amount_for_hour(cls, email, time):
 		try:
 			energy_amount_sum = 0
 
-			if time.hour == 0:
-				start_time = datetime(time.year, time.month, time.day-1, 23)
-			else:
-				start_time = datetime(time.year, time.month, time.day, time.hour-1)
+			start_time = time - timedelta(hours=1)
 			end_time = time
 			data_list = RealTimeEnergyData.query.filter(RealTimeEnergyData.email==email). \
 				filter(RealTimeEnergyData.submit_time>start_time). \
