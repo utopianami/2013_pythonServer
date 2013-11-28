@@ -4,7 +4,7 @@ from flask.ext.testing import TestCase
 
 from app import app, db
 from app.users.models import User, UserInfo
-from app.energy.models import EnergyData
+from app.energy.models import EnergyData, RealTimeEnergyData
 from pprint import pprint
 from datetime import datetime, timedelta
 import random
@@ -31,20 +31,32 @@ class ManyTest(TestCase):
         db.session.remove()
         db.drop_all()
 
-    def test_get_energy_data(self):
+    def test_get_set_energy_data(self):
+        rv = self.sign_up('test', 'test')
 
-        rv = self.getrecycledata('test')
-        print rv.data
+        rt = RealTimeEnergyData('test', 100)
+        rt.submit_time = datetime.now()-timedelta(hours=1)
+        db.session.add(rt)
+        db.session.commit()
+
+        rt = RealTimeEnergyData('test', 200)
+        rt.submit_time = datetime.now()-timedelta(hours=1)
+        db.session.add(rt)
+        db.session.commit()
+
 
         rv = self.setrecycledata('test', '100')
-
-        rv = self.getrecycledata('test')
-        print rv.data
-
-    def test_set_energy_data(self):
-        rv = self.setrecycledata('test', '100')
-        
         assert rv.data == 'True'
+        rv = self.setrecycledata('test', '200')
+        assert rv.data == 'True'
+        rv = self.setrecycledata('test', '300')
+        assert rv.data == 'True'
+        rv = self.setrecycledata('test', '400')
+        assert rv.data == 'True'
+
+        rv = self.getrecycledata('test')
+        assert rv.data == '400'
+
         
     def test_goal(self):
         u = User('goal', 'goal')
@@ -83,14 +95,14 @@ class ManyTest(TestCase):
         rv = self.sign_in('Ha', 'Man')
         assert rv.data == 'False'
 
-    def test_info_setup(self):
+    def tmp_test_info_setup(self):
         self.make_users()
-        print 'Make Users : %d'%(len(User.query.all() ) )
+        #print 'Make Users : %d'%(len(User.query.all() ) )
         self.ptrol_all_users()
 
-        print UserInfo.query.count() == 12
-        print User.query.count() == 12
-        pprint(User.query.all())
+        #print UserInfo.query.count() == 12
+        #print User.query.count() == 12
+        #pprint(User.query.all())
 
         test_user = User('test_user5393', '5393')
         db.session.add(test_user)
@@ -106,7 +118,7 @@ class ManyTest(TestCase):
         test_user = User.find_by_email('test_user5393')
         test_user_info = test_user.user_info.first()
         
-        print test_user_info.get_avg_energy_data_with_date(datetime(2013, 10, 1, 1), datetime(2013, 10, 31, 23, 59, 59))
+        #print test_user_info.get_avg_energy_data_with_date(datetime(2013, 10, 1, 1), datetime(2013, 10, 31, 23, 59, 59))
 
         self.sign_up('test_user7193', '7193')   
         self.sign_in('test_user7193', '7193')   
@@ -115,9 +127,9 @@ class ManyTest(TestCase):
         test_user = User.find_by_email('test_user7193')
         test_user_info = test_user.user_info.first()
         
-        print test_user_info.get_avg_energy_data_with_date(datetime(2013, 10, 1, 1), datetime(2013, 10, 31, 23, 59, 59))
+        #print test_user_info.get_avg_energy_data_with_date(datetime(2013, 10, 1, 1), datetime(2013, 10, 31, 23, 59, 59))
 
-    def test_insert_energy(self):
+    def tmp_test_insert_energy(self):
 
         u = User('Energy', 'password')
         db.session.add(u)
@@ -145,8 +157,8 @@ class ManyTest(TestCase):
                 temp_list.append(int(val)) 
             energy_data_list.append(temp_list)
         
-        print 'EnergyData List Success make'
-        pprint(energy_data_list)
+        #print 'EnergyData List Success make'
+        #pprint(energy_data_list)
 
 
                 

@@ -39,19 +39,12 @@ class SetDataRecycleSmartphone(View):
 			email = request.form['userEmail']
 			energy_amount = int(request.form['energyAmount'])
 
-			if RealTimeEnergyData.query.filter_by(email=email).count() == 0:
-				print 'Make RealTime Energy Data %r:%d'%(email, energy_amount)
-				rt = RealTimeEnergyData(email=email, energy_amount=energy_amount)
-				db.session.add(rt)
-				db.session.commit()
+			rt = RealTimeEnergyData(email=email, energy_amount=energy_amount)
+			rt.push_data()
 
-			else:
-				print 'RealTime Energy Data put %r:%d'%(email, energy_amount)
-				RealTimeEnergyData.query.filter_by(email=email).first().set_energy_amount( energy_amount)
-				db.session.commit()
-	
 			return 'True'
 		except Exception, e:
+			print 'SetDataRecycle : %r'%e
 			return 'False'
 
 class GetDataRecycleSmartphone(View):
@@ -62,14 +55,16 @@ class GetDataRecycleSmartphone(View):
 		try:
 			
 			email = request.form['userEmail']
-			rt= RealTimeEnergyData.query.filter_by(email=email)
-			
-			if rt.count() == 0:
+			rt= RealTimeEnergyData.query.filter_by(email=email).all()
+
+			if len(rt)== 0:
 				return '0'
 			else:
-				return '%d'%rt.first().energy_amount
+				rt.reverse()
+				return '%d'%rt[0].energy_amount
 			
 		except Exception, e:
+			print 'GetDataRecycle : %r'%e
 			return 'False'
 
 mod.add_url_rule('/insert/', view_func=InsertEnergyData.as_view('insert_energy_data'))
