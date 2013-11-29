@@ -75,8 +75,7 @@ class InfoSetUp(View):
 
 		except IntegrityError, e:
 			print 'Aleady Exist User Info for %r'%email
-			avg_data = user_info.get_avg_energy_data_with_date(datetime(2013, 11, 1, 1), datetime(2013, 11, 31, 23, 59, 59))
-			return str(avg_data)
+			return 111
 			
 		except Exception, e:
 			print 'Set Up Error  : %r '%e
