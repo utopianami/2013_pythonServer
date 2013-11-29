@@ -31,7 +31,7 @@ class ManyTest(TestCase):
         db.session.remove()
         db.drop_all()
 
-    def test_get_set_energy_data(self):
+    def tmp_test_get_set_energy_data(self):
         rv = self.sign_up('test', 'test')
         
         energy_amount=100
@@ -85,14 +85,14 @@ class ManyTest(TestCase):
         rv = self.sign_in('Ha', 'Man')
         assert rv.data == 'False'
 
-    def tmp_test_info_setup(self):
+    def test_info_setup(self):
         self.make_users()
-        #print 'Make Users : %d'%(len(User.query.all() ) )
+        print 'Make Users : %d'%(len(User.query.all() ) )
         self.ptrol_all_users()
 
-        #print UserInfo.query.count() == 12
-        #print User.query.count() == 12
-        #pprint(User.query.all())
+        print UserInfo.query.count() == 12
+        print User.query.count() == 12
+        pprint(User.query.all())
 
         test_user = User('test_user5393', '5393')
         db.session.add(test_user)
@@ -118,6 +118,11 @@ class ManyTest(TestCase):
         test_user_info = test_user.user_info.first()
         
         #print test_user_info.get_avg_energy_data_with_date(datetime(2013, 10, 1, 1), datetime(2013, 10, 31, 23, 59, 59))
+
+        print '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+        rv = self.getmonthdata('User7193')
+        print rv.data 
+        print '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
 
     def tmp_test_insert_energy(self):
 
@@ -169,7 +174,7 @@ class ManyTest(TestCase):
                         db.session.commit()
 
     def make_energy_data(self,user_email, energy_amount):
-        DEFAULT_YEAR, DEFAULT_MOONTH, DEFAULT_DAY, DEFAULT_TIME = 2013, 10, 1, 0
+        DEFAULT_YEAR, DEFAULT_MOONTH, DEFAULT_DAY, DEFAULT_TIME = 2013, 11, 1, 0
         minus_flag = -1
 
         dt = datetime(DEFAULT_YEAR, DEFAULT_MOONTH, DEFAULT_DAY, DEFAULT_TIME)
@@ -237,6 +242,9 @@ class ManyTest(TestCase):
             userEmail = user_email,
             ), follow_redirects=True)        
         
-
+    def getmonthdata(self, user_email):
+        return self.client.post('/energy/getmonthdata/', data = dict(
+            userEmail = user_email,
+            ), follow_redirects=True)
 if __name__ == '__main__':
     unittest.main()

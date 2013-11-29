@@ -4,6 +4,7 @@ from app import db
 from app.energy.models import EnergyData, RealTimeEnergyData
 from flask.views import View
 from datetime import datetime
+import json
 
 mod = Blueprint('energy', __name__, url_prefix='/energy')
 
@@ -82,9 +83,10 @@ class GetMonthData(View):
 
 			result = {'daily_datas':daily_datas, 'standby_datas':standby_datas, 'friend_dats':friend_dats}
 			result = json.dumps(result)
-			return ""+result
+			return result
 
 		except Exception, e:
+			print e
 			return 'False'
 
 mod.add_url_rule('/insert/', view_func=InsertEnergyData.as_view('insert_energy_data'))
