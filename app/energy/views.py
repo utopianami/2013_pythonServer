@@ -86,10 +86,11 @@ class GetMonthData(View):
 
 		except Exception, e:
 			return 'False'
-mod.add_url_rule('/getmonthdata', view_func=GetMonthData.as_view('get_month_data'))
+
 mod.add_url_rule('/insert/', view_func=InsertEnergyData.as_view('insert_energy_data'))
 mod.add_url_rule('/setrecycledata/', view_func=SetDataRecycleSmartphone.as_view('set_data_recycle_smartphone'))
 mod.add_url_rule('/getrecycledata/', view_func=GetDataRecycleSmartphone.as_view('get_data_recycle_smartphone'))
+mod.add_url_rule('/getmonthdata/', view_func=GetMonthData.as_view('get_month_data'))
 
 
 
