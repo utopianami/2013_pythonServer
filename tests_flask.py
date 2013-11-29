@@ -35,7 +35,7 @@ class ManyTest(TestCase):
         rv = self.sign_up('test', 'test')
         
         energy_amount=100
-        test_year, test_month, test_day, test_hour, test_minute, test_second = 2013, 11, 29, 16, 59, 50
+        test_year, test_month, test_day, test_hour, test_minute, test_second = 2013, 11, 29, 1, 59, 50
         time_gap = timedelta(seconds=3)
         time = datetime(test_year, test_month, test_day, test_hour, test_minute, test_second)
         for i in xrange(20):
