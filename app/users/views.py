@@ -75,7 +75,7 @@ class InfoSetUp(View):
 
 		except IntegrityError, e:
 			print 'Aleady Exist User Info for %r'%email
-			return 111
+			return '10'
 			
 		except Exception, e:
 			print 'Set Up Error  : %r '%e
