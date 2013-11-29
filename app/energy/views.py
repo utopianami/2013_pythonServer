@@ -67,6 +67,25 @@ class GetDataRecycleSmartphone(View):
 			print 'GetDataRecycle : %r'%e
 			return 'False'
 
+class GetMonthData(View):
+	methods = ['POST']
+
+	def dispatch_request(self):
+		try:
+			date = datetime.now().day
+			
+			email = request.form['userEmail']
+
+			daily_datas = EnergyData.get_month_energy_datas(email)
+			standby_datas = EnergyData.get_month_standby_datas(email)
+			friend_dats = EnergyData.get_month_energy_datas('User7293')
+
+			result = {'daily_datas':daily_datas, 'standby_datas':standby_datas, 'friend_dats':friend_dats}
+			return json.dumps(result)
+
+		except Exception, e:
+			return 'False'
+mod.add_url_rule('/getmonthdata', view_func=GetMonthData.as_view('get_month_data'))
 mod.add_url_rule('/insert/', view_func=InsertEnergyData.as_view('insert_energy_data'))
 mod.add_url_rule('/setrecycledata/', view_func=SetDataRecycleSmartphone.as_view('set_data_recycle_smartphone'))
 mod.add_url_rule('/getrecycledata/', view_func=GetDataRecycleSmartphone.as_view('get_data_recycle_smartphone'))

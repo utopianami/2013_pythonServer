@@ -42,6 +42,55 @@ class EnergyData(db.Model):
 		return EnergyData.query.filter(EnergyData.user_id==user_id). \
 			filter(EnergyData.submit_time>start_date). \
 			filter(EnergyData.submit_time<end_date).all()
+	@classmethod 
+	def get_month_standby_datas(cls, email):
+		from app.users.models import User
+		user = User.find_by_email(email)
+
+		year = datetime.now().year
+		month = datetime.now().month
+		max_day = datetime.now().day
+		standby_data_list = []
+		
+		for day in xrange(1, max_day):
+			start_date = datetime(year, month, day, 1)
+			end_date = start_date + timedelta(hours=7)
+			day_datas = cls.get_energy_datas_with_date(user.id, start_date, end_date)
+			data_sum = 0;
+			for day_data in day_datas:
+				data_sum += day_data.energy_amount
+			standby_data_list.append(data_sum)
+			
+		for index in xrange(2, max_day-1):
+			standby_data_list[index] += standby_data_list[index-1]
+
+		return standby_data_list
+
+
+	@classmethod
+	def get_month_energy_datas(cls, email):
+		from app.users.models import User
+		user = User.find_by_email(email)
+
+		year = datetime.now().year
+		month = datetime.now().month
+		max_day = datetime.now().day
+		month_data_list = []
+		
+		for day in xrange(1, max_day):
+			start_date = datetime(year, month, day)
+			end_date = start_date + timedelta(days=1)
+			day_datas = cls.get_energy_datas_with_date(user.id, start_date, end_date)
+			data_sum = 0;
+			for day_data in day_datas:
+				data_sum += day_data.energy_amount
+			month_data_list.append(data_sum)
+			
+		for index in xrange(2, max_day-1):
+			month_data_list[index] += month_data_list[index-1]
+
+		return month_data_list
+
 
 class RealTimeEnergyData(db.Model):
 	__tablename__ = "energy_realtimeenergydata"
@@ -70,7 +119,7 @@ class RealTimeEnergyData(db.Model):
 				time = datetime(year, month, day, hour)
 
 				energy_amount = RealTimeEnergyData.get_energy_amount_for_hour(self.email, time)
-				print 'energy_amount : %r'%energy_amount
+				#print 'energy_amount : %r'%energy_amount
 				e = EnergyData._make_energy_data_with_email(self.email, time, energy_amount)
 
 				db.session.add(e)
