@@ -8,6 +8,8 @@ db = SQLAlchemy(app)
 
 from app.users.views import mod as usersModule
 from app.energy.views import mod as energyModule
+from app.missions.views import mod as missionModule
 
 app.register_blueprint(usersModule)
 app.register_blueprint(energyModule)
+app.register_blueprint(missionModule)

@@ -108,7 +108,7 @@ class ManyTest(TestCase):
         test_user = User.find_by_email('test_user5393')
         test_user_info = test_user.user_info.first()
         
-        #print test_user_info.get_avg_energy_data_with_date(datetime(2013, 10, 1, 1), datetime(2013, 10, 31, 23, 59, 59))
+        print test_user_info.get_avg_energy_data_with_date(datetime(2013, 10, 1, 1), datetime(2013, 10, 31, 23, 59, 59))
 
         self.sign_up('test_user7193', '7193')   
         self.sign_in('test_user7193', '7193')   
@@ -117,14 +117,14 @@ class ManyTest(TestCase):
         test_user = User.find_by_email('test_user7193')
         test_user_info = test_user.user_info.first()
         
-        #print test_user_info.get_avg_energy_data_with_date(datetime(2013, 10, 1, 1), datetime(2013, 10, 31, 23, 59, 59))
+        print test_user_info.get_avg_energy_data_with_date(datetime(2013, 10, 1, 1), datetime(2013, 10, 31, 23, 59, 59))
 
         print '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
         rv = self.getmonthdata('User7193')
         print rv.data 
         print '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
 
-    def tmp_test_insert_energy(self):
+    def test_insert_energy(self):
 
         u = User('Energy', 'password')
         db.session.add(u)

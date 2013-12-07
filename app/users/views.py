@@ -69,7 +69,7 @@ class InfoSetUp(View):
 
 			user_info = UserInfo.query.filter_by(house_area=house_area, house_type=house_type\
 				, income_type=income_type, cooler_heater_type=cooler_heater_type).first()
-			avg_data = user_info.get_avg_energy_data_with_date(datetime(2013, 11, 1, 1), datetime(2013, 11, 31, 23, 59, 59))
+			avg_data = user_info.get_avg_energy_data_with_date(datetime(2013, 12, 1, 1), datetime(2013, 12, 31, 23, 59, 59))
 
 			return str(avg_data)
 

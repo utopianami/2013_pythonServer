@@ -54,7 +54,7 @@ def make_users():
 					db.session.commit()
 
 def make_energy_data(user_email, energy_amount):
-	DEFAULT_YEAR, DEFAULT_MOONTH, DEFAULT_DAY, DEFAULT_TIME = 2013, 11, 1, 0
+	DEFAULT_YEAR, DEFAULT_MOONTH, DEFAULT_DAY, DEFAULT_TIME = 2013, 12, 1, 0
 	minus_flag = -1
 
 	dt = datetime(DEFAULT_YEAR, DEFAULT_MOONTH, DEFAULT_DAY, DEFAULT_TIME)

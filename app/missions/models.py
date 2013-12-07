@@ -11,12 +11,28 @@ class Mission(db.Model):
 
 	mission_state = db.relationship('MissionState', backref='mission', lazy='dynamic')
 
-	def __init__(self, title, contents):
+	def __init__(self, title, contents, difficulty, effect):
 		self.title = title
 		self.contents = contents
+		self.difficulty = difficulty
+		self.effect = effect
 
 	def __repr__(self):
 		return '<Mission %r>' % (self.title)
+
+	def push_data(self):
+		db.session.add(self)
+		db.session.commit()
+
+	@classmethod
+	def get_mission_list(cls):
+		try:
+			m_list = cls.query.all()
+			m_list.reverse()
+			return m_list
+
+		except Exception, e:
+			print e
 
 
 class MissionState(db.Model):
