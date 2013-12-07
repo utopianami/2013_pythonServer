@@ -36,4 +36,4 @@ class ReadMission(View):
 		except Exception, e:
 			return 'False'
 
-mod.add_url_rule('/write/', view_func=InsertEnergyData.as_view('write_mission'))
+mod.add_url_rule('/write/', view_func=WriteMission.as_view('write_mission'))
