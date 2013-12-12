@@ -20,8 +20,8 @@ class WriteMission(View):
 			difficulty = request.form['missionDifficulty']
 			effect = request.form['missionEffect']
 
-			effect = int(effect)
-			difficulty = int(difficulty)
+			effect = int(float(effect))
+			difficulty = int(float(difficulty))
 
 			m = Mission(title, contents, difficulty, effect)
 			m.push_data()
