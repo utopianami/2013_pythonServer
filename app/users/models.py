@@ -11,9 +11,8 @@ class User(db.Model):
 	password = db.Column(db.String(120))
 	
 	user_info = db.relationship('UserInfo', backref='user', lazy='dynamic')
-	mission_state = db.relationship('MissionState', backref='user', lazy='dynamic')
 	energy_data = db.relationship('EnergyData', backref='user', lazy='dynamic') 
-	
+	mission_state = db.relationship('MissionState', backref='user', lazy='dynamic') 
 
 	def __init__(self, email=None, password=None):
 		self.password = password;

@@ -1,3 +1,5 @@
+#-*- coding:utf8 -*-
+
 import unittest
 
 from flask.ext.testing import TestCase
@@ -5,9 +7,10 @@ from flask.ext.testing import TestCase
 from app import app, db
 from app.users.models import User, UserInfo
 from app.energy.models import EnergyData, RealTimeEnergyData
+from app.missions.models import Mission, MissionState
 from pprint import pprint
 from datetime import datetime, timedelta
-import random
+import random, json
 
 HOUSE_AREA = [113, 169, 221, 254, 287, 323,352, 360]
 HOUSE_TYPE = [0.80, 0.97, 1.04,  1.17]
@@ -31,6 +34,24 @@ class ManyTest(TestCase):
         db.session.remove()
         db.drop_all()
 
+    def test_write_mission(self):
+        rv = self.sign_up('test', 'test')
+        assert rv.data=='True'
+        
+        rv = self.writemission('test', '한글', 'man', '1', '3')
+        rv = json.loads(rv.data)
+        
+        print rv
+        
+        assert rv.get('code') == 'success'
+        assert Mission.query.count() == 1
+        #print MissionState.query.all()
+        assert MissionState.query.count() == 1
+    
+        rv = self.readmission()
+        rv = json.loads(rv.data)
+        print rv
+
     def tmp_test_get_set_energy_data(self):
         rv = self.sign_up('test', 'test')
         
@@ -48,12 +69,11 @@ class ManyTest(TestCase):
         
         
 
-    def test_goal(self):
+    def tmp_test_goal(self):
         u = User('goal', 'goal')
         db.session.add(u)
         db.session.commit()
-        assert User.query.count() == 1
-
+        
         ui = UserInfo._make_user_info_with_email('goal', 5, 3, 9, 3)
         db.session.add(ui)
         db.session.commit()
@@ -64,7 +84,7 @@ class ManyTest(TestCase):
 
         assert User.query.filter_by(email='goal').first().user_info.first().goal==5
 
-    def test_sign(self):
+    def tmp_test_sign(self):
         u = User('email22', 'password')
 
         db.session.add(u)
@@ -85,7 +105,7 @@ class ManyTest(TestCase):
         rv = self.sign_in('Ha', 'Man')
         assert rv.data == 'False'
 
-    def test_info_setup(self):
+    def tmp_test_info_setup(self):
         self.make_users()
         print 'Make Users : %d'%(len(User.query.all() ) )
         self.ptrol_all_users()
@@ -124,7 +144,7 @@ class ManyTest(TestCase):
         print rv.data 
         print '++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
 
-    def test_insert_energy(self):
+    def tmp_test_insert_energy(self):
 
         u = User('Energy', 'password')
         db.session.add(u)
@@ -246,5 +266,19 @@ class ManyTest(TestCase):
         return self.client.post('/energy/getmonthdata/', data = dict(
             userEmail = user_email,
             ), follow_redirects=True)
+
+    def writemission(self, user_email, title, contents, difficulty, effect):
+        return self.client.post('/missions/write/', data = dict(
+            userEmail = user_email,
+            missionTitle = title,
+            missionContents =  contents,
+            missionDifficulty = difficulty,
+            missionEffect = effect
+            ), follow_redirects=True)
+
+    def readmission(self):
+        return self.client.post('/missions/read/', data = dict(
+            ), follow_redirects=True)
+
 if __name__ == '__main__':
     unittest.main()

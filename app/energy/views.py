@@ -82,7 +82,7 @@ class GetMonthData(View):
 			friend_dats = EnergyData.get_month_energy_datas('User7293')
 
 			result = {'daily_datas':daily_datas, 'standby_datas':standby_datas, 'friend_datas':friend_dats, 'day':date}
-			result = json.dumps(result)
+			result = json.dumps(result) 
 			return result
 
 		except Exception, e:
