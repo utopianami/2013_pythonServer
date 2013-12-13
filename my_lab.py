@@ -97,7 +97,7 @@ def make_special_user():
 	db.session.add(ui)
 	db.session.commit()
 
-	user_email = "test"%(house_area, house_type, income, cooler_heater_type)
+	user_email = 'test'
 	password = 'test'
 	
 	u = User(user_email, password)
