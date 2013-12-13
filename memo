@@ -11,4 +11,5 @@
 	
 3. ReadWikiData 
 	Server에서 넘길떄 .encode('utf8') 해주기
-	
+
+

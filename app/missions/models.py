@@ -31,7 +31,7 @@ class Mission(db.Model):
 		try:
 			mission_list = []
 			for mission in cls.query.all():
-				mission_info = [mission.id, base64.decodestring(mission.title), base64.decodestring(mission.contents),\
+				mission_info = [mission.id, base64.decodestring(mission.title).encode('utf-8'), base64.decodestring(mission.contents).encode('utf-8'),\
 					mission.difficulty, mission.effect]
 				mission_list.append(mission_info)
 			#mission_list.reverse()
