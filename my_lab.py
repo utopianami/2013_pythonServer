@@ -97,6 +97,18 @@ def make_special_user():
 	db.session.add(ui)
 	db.session.commit()
 
+	user_email = "test"%(house_area, house_type, income, cooler_heater_type)
+	password = 'test'
+	
+	u = User(user_email, password)
+	db.session.add(u)
+	db.session.commit()
+
+	ui = UserInfo._make_user_info_with_email(user_email, house_area, house_type, income, cooler_heater_type)
+	db.session.add(ui)
+	db.session.commit()
+
+
 	DEFAULT_YEAR, DEFAULT_MOONTH, DEFAULT_DAY, DEFAULT_TIME = 2013, 12, 1, 0
 
 	special_energy_set = [3, 3, 5, 4, 6, 5, 2, 9, 1, 8, 5, 7, 4, 9, 3, 5, 2, 7, 7, 6, 1, 1, 1, 1, 6, 2, 9, 5, 9, 5]
