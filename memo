@@ -1,0 +1,14 @@
+1. Special User 만들기
+	User1111 생성
+	[1, 3, 1, 5, 6, ....  , 5]  : 12개 리스트 만든후에 곱해서 1~31일 가짜 데이터 만들기
+
+	test(User) 생성 후 
+	INFO 1111로 셋팅
+
+2. WikiListView 제대로 안그려지는것 수정
+	notifyDataSetChanged로 제대로 그려지는데
+	Index10개 쯤부터 값이 이상하게 그려짐
+	
+3. ReadWikiData 
+	Server에서 넘길떄 .encode('utf8') 해주기
+	
