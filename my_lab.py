@@ -129,7 +129,7 @@ def make_special_user2():
 
 	DEFAULT_YEAR, DEFAULT_MOONTH, DEFAULT_DAY, DEFAULT_TIME = 2013, 12, 1, 0
 
-	special_energy_set = [6, 2, 4, 3, 2, 4, 3, 3, 4, 6, 5, 7, 4, 9, 3, 5, 2, 7, 7, 6, 1, 1, 1, 1, 6, 2, 9, 5, 9, 5]
+	special_energy_set = [1, 2, 4, 3, 2, 4, 3, 3, 4, 6, 5, 7, 4, 9, 3, 5, 2, 7, 7, 6, 1, 1, 1, 1, 6, 2, 9, 5, 9, 5]
 	dt = datetime(DEFAULT_YEAR, DEFAULT_MOONTH, DEFAULT_DAY, DEFAULT_TIME)
 	for day_plus in xrange(1, 31):
 		for time_plus in xrange(0,24):
