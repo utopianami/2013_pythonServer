@@ -85,18 +85,6 @@ def ptrol_all_users():
 					make_energy_data(user_email, energy_amount)
 					
 def make_special_user():
-	user_email = 'test'
-	password = 'test'
-	
-	u = User(user_email, password)
-	db.session.add(u)
-	db.session.commit()
-
-	ui = UserInfo._make_user_info_with_email(user_email, house_area, house_type, income, cooler_heater_type)
-	db.session.add(ui)
-	db.session.commit()
-
-
 	house_area, house_type, income, cooler_heater_type = 1, 1, 1, 1
 	user_email = "User%d%d%d%d"%(house_area, house_type, income, cooler_heater_type)
 	password = 'password'
@@ -118,7 +106,7 @@ def make_special_user():
 		for time_plus in xrange(0,24):
 			
 			
-			energy_amount = special_energy_set[day_plus-1]*300
+			energy_amount = special_energy_set[day_plus-1]*200
 
 			ed = EnergyData._make_energy_data_with_email(user_email, dt, energy_amount)
 			db.session.add(ed)

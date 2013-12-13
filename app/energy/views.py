@@ -66,7 +66,7 @@ class GetDataRecycleSmartphone(View):
 			
 		except Exception, e:
 			print 'GetDataRecycle : %r'%e
-			return 'False'
+			return '0'
 
 class GetMonthData(View):
 	methods = ['POST']
@@ -79,7 +79,7 @@ class GetMonthData(View):
 
 			daily_datas = EnergyData.get_month_energy_datas(email)
 			standby_datas = EnergyData.get_month_standby_datas(email)
-			friend_dats = EnergyData.get_month_energy_datas('User7293')
+			friend_dats = EnergyData.get_month_energy_datas('User1111')
 
 			result = {'daily_datas':daily_datas, 'standby_datas':standby_datas, 'friend_datas':friend_dats, 'day':date}
 			result = json.dumps(result) 
